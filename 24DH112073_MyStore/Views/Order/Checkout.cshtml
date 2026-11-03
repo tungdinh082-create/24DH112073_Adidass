@@ -1,0 +1,214 @@
+﻿@model _24DH112073_MyStore.Models.ViewModel.CheckoutVM
+@using _24DH112073_MyStore.Models.ViewModel
+
+@{
+    ViewBag.Title = "Đặt hàng";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    var cart = Model.CartItems;
+    // Đây là Tạm tính (chưa có phí ship)
+    decimal subTotalAmount = Model.TotalAmount;
+}
+
+<script>
+    function enableAddressEdit() {
+        document.getElementById("AddressDelivery").removeAttribute("readonly");
+        document.getElementById("AddressDelivery").focus(); // Tự động focus vào ô
+    }
+</script>
+
+<h2 class="bg-success" style="padding: 10px; color: white;">ĐẶT HÀNG</h2>
+
+@using (Html.BeginForm("Checkout", "Order", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-8">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            <h3>Thông tin giao hàng</h3>
+            <hr />
+            <div class.="form-group">
+                <label class="control-label col-md-3">Địa chỉ giao hàng</label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(m => m.AddressDelivery, new { @class = "form-control", @readonly = "readonly", @id = "AddressDelivery" })
+                    <button type="button" class="btn btn-primary btn-sm" style="margin-top: 5px;" onclick="enableAddressEdit()">Chỉnh sửa</button>
+                    @Html.ValidationMessageFor(m => m.AddressDelivery, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <h3 style="margin-top: 20px;">Phương thức giao hàng</h3>
+            <hr />
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="radio">
+                        <label>
+                            @Html.RadioButtonFor(m => m.DeliveryMethod, "Giao hàng nhanh", new
+                            {
+                                @id = "ship1",
+                                @data_cost = "20000",  // <--- QUAN TRỌNG: Giá tiền
+                                @onchange = "updateTotal()", // <--- QUAN TRỌNG: Gọi hàm tính tiền
+                                @checked = "checked" // Mặc định chọn cái này
+                            })
+                            Giao hàng nhanh (20.000 VNĐ)
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            @Html.RadioButtonFor(m => m.DeliveryMethod, "Giao hàng tiết kiệm", new
+                            {
+                                @id = "ship2",
+                                @data_cost = "10000", // <--- QUAN TRỌNG: Giá tiền
+                                @onchange = "updateTotal()" // <--- QUAN TRỌNG: Gọi hàm tính tiền
+                            })
+                            Giao hàng tiết kiệm (10.000 VNĐ)
+                        </label>
+                    </div>
+
+                    @Html.ValidationMessageFor(m => m.DeliveryMethod, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <h3 style="margin-top: 20px;">Phương thức thanh toán</h3>
+            <hr />
+            <div class="form-group">
+                <div class="col-md-offset-1 col-md-11">
+                    @Html.RadioButtonFor(m => m.PaymentMethod, "Tiền mặt", new { id = "pay1" })
+                    <label for="pay1">Tiền mặt (khi nhận hàng - COD)</label> <br />
+
+                    @Html.RadioButtonFor(m => m.PaymentMethod, "PayPal", new { id = "pay2" })
+                    <label for="pay2">PayPal</label> <br />
+
+                    @Html.RadioButtonFor(m => m.PaymentMethod, "Mua trước trả sau", new { id = "pay3" })
+                    <label for="pay3">Mua trước trả sau</label>
+                    @Html.ValidationMessageFor(m => m.PaymentMethod, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" style="padding-left: 30px;">
+            <div class="checkout-summary" style="background-color: #f9f9f9; padding: 25px; border-radius: 8px; border: 1px solid #eee;">
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h4 style="margin: 0; font-weight: bold; text-transform: uppercase; font-size: 1.1rem;">Đơn hàng của bạn</h4>
+                    <a href="@Url.Action("Index", "Cart")" style="font-size: 0.85rem; text-decoration: underline; color: #333;">CHỈNH SỬA</a>
+                </div>
+
+                <div class="product-list" style="margin-bottom: 20px;">
+                    @if (Model.CartItems != null && Model.CartItems.Any())
+                    {
+                        foreach (var item in Model.CartItems)
+                        {
+                            <div class="product-item" style="display: flex; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e5e5e5;">
+                                <div style="width: 70px; height: 70px; background: #fff; border: 1px solid #eee; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">
+                                    <img src="@Url.Content(item.ProductImage ?? "~/Content/images/default.png")"
+                                         style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+                                </div>
+
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold; margin-bottom: 5px; font-size: 0.95rem;">@item.ProductName</div>
+                                    <div style="font-size: 0.85rem; color: #666;">
+                                        Số lượng: @item.Quantity <br />
+                                    </div>
+                                </div>
+
+                                <div style="text-align: right; font-weight: bold; font-size: 0.95rem;">
+                                    @Html.FormatValue(item.TotalPrice, "{0:N0}₫")
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div style="font-size: 0.95rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Tạm tính (@Model.CartItems.Sum(x => x.Quantity) món)</span>
+                        <span style="font-weight: bold;">@Html.FormatValue(subTotalAmount, "{0:N0}₫")</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Phí giao hàng</span>
+                        <span id="shipping-fee-display" style="font-weight: bold;">0 VNĐ</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 20px; padding-top: 15px; border-top: 2px solid #333; font-size: 1.2rem; font-weight: bold;">
+                        <span>TỔNG CỘNG</span>
+                        <span id="total-amount-display" data-subtotal="@subTotalAmount" style="color: #c00;">
+                            @Html.FormatValue(subTotalAmount, "{0:N0}₫")
+                        </span>
+                    </div>
+
+                    <div style="font-size: 0.8rem; color: #777; margin-top: 5px; text-align: right;">
+                        (Đã bao gồm thuế VAT)
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 25px;">
+                    <button type="submit" class="btn btn-dark btn-lg btn-block" style="width: 100%; border-radius: 0; font-weight: bold; text-transform: uppercase; padding: 15px; background-color: #000; color: #fff;">
+                        ĐẶT HÀNG NGAY <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            // Chạy hàm tính toán ngay khi load trang để cập nhật số liệu mặc định
+            updateTotal();
+
+            // Đoạn script "bẻ lái" sang PayPal (Giữ nguyên cái cũ của bạn)
+            $('#checkoutForm').submit(function (e) {
+                var paymentMethod = $('input[name="PaymentMethod"]:checked').val();
+                if (paymentMethod === "PayPal") {
+                    $(this).attr('action', '/Paypal/PaymentWithPaypal');
+                } else {
+                    $(this).attr('action', '/Order/Checkout');
+                }
+            });
+        });
+
+        // Hàm định dạng tiền tệ (VD: 20000 -> 20.000₫)
+        function formatCurrency(number) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number).replace('₫', '₫');
+            // Hoặc .replace('₫', ' VNĐ') tùy ý bạn
+        }
+
+        // HÀM TÍNH TIỀN CHÍNH
+        function updateTotal() {
+            // 1. Lấy giá trị Tạm tính gốc
+            // (Lưu ý: Code cũ tìm "subtotal-display" nhưng HTML không có. 
+            // Ta sửa thành lấy từ "total-amount-display" vì thẻ này đang chứa data-subtotal)
+            var totalElement = document.getElementById("total-amount-display");
+            var subtotal = parseFloat(totalElement.getAttribute("data-subtotal"));
+
+            // 2. Lấy phí ship
+            var shippingCost = 0;
+            var ship1 = document.getElementById("ship1");
+            var ship2 = document.getElementById("ship2");
+
+            if (ship1 && ship1.checked) {
+                shippingCost = parseFloat(ship1.getAttribute("data-cost"));
+            } else if (ship2 && ship2.checked) {
+                shippingCost = parseFloat(ship2.getAttribute("data-cost"));
+            }
+
+            // 3. Tính tổng
+            var finalTotal = subtotal + shippingCost;
+
+            // 4. Cập nhật lên giao diện
+            document.getElementById("shipping-fee-display").innerText = formatCurrency(shippingCost);
+            document.getElementById("total-amount-display").innerText = formatCurrency(finalTotal);
+        }
+    </script>
+}

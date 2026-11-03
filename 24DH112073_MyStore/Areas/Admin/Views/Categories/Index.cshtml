@@ -1,0 +1,47 @@
+﻿@model IEnumerable<_24DH112073_MyStore.Models.Category>
+
+@{
+    ViewBag.Title = "Danh sách Danh mục";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="bg-success" style="padding:10px; color:white;">DANH SÁCH DANH MỤC</h2>
+
+<p style="margin-top: 15px;">
+    @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table table-bordered table-hover" style="margin-top: 15px;">
+    <tr class="bg-success" style="color:white;">
+
+        <th class="col-md-7">
+            TÊN DANH MỤC
+        </th>
+
+        <th class="col-md-2" style="text-align: center;">
+            SỐ LƯỢNG SẢN PHẨM
+        </th>
+
+        <th class="col-md-3"></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+
+            <td style="text-align: center;">
+                @item.Products.Count()
+            </td>
+
+            <td style="text-align: right;">
+                @Html.ActionLink("Chi tiết", "Details", new { id = item.CategoryID }, new { @class = "btn btn-info btn-sm" })
+                @Html.ActionLink("Sửa", "Edit", new { id = item.CategoryID }, new { @class = "btn btn-primary btn-sm" })
+                @Html.ActionLink("Xóa", "Delete", new { id = item.CategoryID }, new { @class = "btn btn-danger btn-sm" })
+            </td>
+        </tr>
+    }
+
+</table>

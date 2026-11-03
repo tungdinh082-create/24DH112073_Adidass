@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Quan Tri WEBSITE </title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="@Url.Action("Index", "Home", new { area = "Admin" })">
+                <img src="@Url.Content("~/Content/images/logo.jpg")" alt="MyStore Logo" style="height: 30px;" />
+            </a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "Admin" }, new { @class = "nav-link" })</li>
+
+                    <li>@Html.ActionLink("Danh mục", "Index", "Categories", new { area = "Admin" }, new { @class = "nav-link" })</li>
+
+                    <li>@Html.ActionLink("Sản phẩm ", "Index", "Products", new { area = "Admin" }, new { @class = "nav-link" })</li>
+
+                    <li>@Html.ActionLink("Khách hàng ", "Index", "Customers", new { area = "Admin" }, new { @class = "nav-link" })</li>
+
+                    <li>@Html.ActionLink("Đơn hàng ", "Index", "Orders", new { area = "Admin" }, new { @class = "nav-link" })</li>
+
+                    <li>@Html.ActionLink("Tài Khoản", "Index", "AdminUsers", new { area = "Admin" }, new { @class = "nav-link" })</li>
+                </ul>
+                <ul class="navbar-nav">
+                    @* Kiểm tra xem Admin đã đăng nhập chưa (dùng Session) *@
+                    @if (Session["AdminUser"] != null)
+                    {
+                        var admin = Session["AdminUser"] as _24DH112073_MyStore.Models.User;
+
+                        <li class="nav-item">
+                            @* Hiển thị tên Admin (không click được) *@
+                            <a class="nav-link" href="#">Chào, @admin.Username</a>
+                        </li>
+                        <li class="nav-item">
+                            @* Link đến Action Logout trong AuthController (Admin) *@
+                            @Html.ActionLink("Đăng xuất", "Logout", "Auth", new { area = "Admin" }, new { @class = "nav-link" })
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Adidas</p>
+            <h4> contact </h4>
+            <p>Đinh Thanh Tùng</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+
+    @* SỬA LỖI: Bỏ bundle và gọi file JS trực tiếp *@
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

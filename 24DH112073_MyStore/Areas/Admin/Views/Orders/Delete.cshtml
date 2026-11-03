@@ -1,0 +1,61 @@
+﻿@model _24DH112073_MyStore.Models.Order
+
+@{
+    ViewBag.Title = "Xác nhận Xóa Đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml"; // Sử dụng Layout Admin
+}
+
+<h2 class="bg-danger" style="padding:10px; color:white;">XÁC NHẬN XÓA ĐƠN HÀNG</h2>
+
+<h3 class="text-danger">Bạn có chắc muốn xóa đơn hàng số @Model.OrderID không?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Khách hàng
+        </dt>
+        <dd>
+            @* Controller cần .Include(o => o.Customer) để dòng này hoạt động *@
+            @Html.DisplayFor(model => model.Customer.CustomerName)
+        </dd>
+
+        <dt>
+            Ngày đặt
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+
+        <dt>
+            Tổng tiền
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalAmount)
+        </dd>
+
+        <dt>
+            Trạng thái
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PaymentStatus)
+        </dd>
+
+        <dt>
+            Địa chỉ giao
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddressDelivery)
+        </dd>
+    </dl>
+
+    @* SỬA LỖI: Dùng Form để gửi POST, thay vì link (GET) *@
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Xóa" class="btn btn-danger" /> 
+            @Html.ActionLink("Quay lại danh sách", "Index", null, new { @class = "btn btn-default" }, new { @class = "btn btn-primary btn-sm" })
+        </div>
+    }
+</div>

@@ -1,0 +1,5 @@
+﻿USE [MyStore];
+GO
+
+ALTER TABLE Product 
+ADD IsActive BIT NOT NULL DEFAULT 1 WITH VALUES;

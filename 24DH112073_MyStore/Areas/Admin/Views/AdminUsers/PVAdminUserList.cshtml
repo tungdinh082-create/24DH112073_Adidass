@@ -1,0 +1,44 @@
+﻿@model _24DH112073_MyStore.Models.ViewModel.AdminUserSearchVM
+@using PagedList.Mvc
+@using PagedList
+
+@* Nhớ thêm file PagedList.css vào thư mục Content nếu chưa có *@
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@if (Model.AdminUsers != null && Model.AdminUsers.Any())
+{
+    <table class="table table-bordered table-hover">
+        <tr class="bg-success">
+            <th>Tên đăng nhập (Username)</th>
+            <th>Vai trò (UserRole)</th>
+            <th style="width: 180px;"></th>
+        </tr>
+
+        @foreach (var item in Model.AdminUsers)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Username)</td>
+                <td>@Html.DisplayFor(modelItem => item.UserRole)</td>
+                <td>
+                    @* ĐÃ SỬA: Dùng "id = item.Username" vì khóa chính là string *@
+                    @Html.ActionLink("Đổi Mật Khẩu", "Edit", new { id = item.Username }, new { @class = "btn btn-primary btn-sm" })
+                    @Html.ActionLink("Chi tiết", "Details", new { id = item.Username }, new { @class = "btn btn-info btn-sm" })             
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Không tìm thấy tài khoản Admin nào.</p>
+}
+
+@Html.PagedListPager(
+    Model.AdminUsers,
+    page => Url.Action("Index", new { page }),
+    new PagedListRenderOptions
+    {
+        UlElementClasses = new List<string> { "pagination" },
+        LiElementClasses = new List<string> { "page-item" }
+    }
+)

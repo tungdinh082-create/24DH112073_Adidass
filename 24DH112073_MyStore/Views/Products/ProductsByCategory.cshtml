@@ -1,0 +1,44 @@
+﻿@model IEnumerable<_24DH112073_MyStore.Models.Product>
+
+@{
+    ViewBag.Title = "Sản phẩm: " + ViewBag.CategoryName;
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+@* 1. THÊM DÒNG LINK CSS NÀY (để lấy style của "lproduct-item", "prodPrice"...) *@
+<link rel="stylesheet" type="text/css" href="~/Content/myStyle/CustomerHome.css" />
+
+<h2 class="bg-success" style="padding: 10px; color: white;">DANH MỤC: @ViewBag.CategoryName</h2>
+<hr />
+
+@if (Model != null && Model.Any())
+{
+    <section class="container-fluid listProduct">
+        <ul class="list-container">
+            @* SỬA 1: Dùng list-container (CSS Grid) *@
+
+            @foreach (var item in Model)
+            {
+                <li class="lproduct-item">
+                    @* SỬA 2: Dùng lproduct-item (CSS Grid item) *@
+                    <div>
+                        <a href="@Url.Action("ProductDetail", "Home", new { id = item.ProductID })">
+                            <img src="@Url.Content(item.ProductImage ?? "~/Content/images/default.png")" />
+                        </a>
+                    </div>
+                    <div>
+                        <p class="prodPrice">@Html.FormatValue(item.ProductPrice, "{0:N0} VNĐ")</p>
+                        <p class="prodName">@Html.DisplayFor(modelItem => item.ProductName)</p>
+                        <p class="prodCate">@Html.DisplayFor(modelItem => item.Category.CategoryName)</p>
+                        <p class="prodSale">Đã bán: &nbsp; @Html.DisplayFor(modelItem => item.OrderDetails.Count)</p>
+                    </div>
+                </li>
+            }
+
+        </ul>
+    </section>
+}
+else
+{
+    <p>Danh mục này hiện chưa có sản phẩm nào.</p>
+}

@@ -1,0 +1,50 @@
+﻿@* SỬA 1: Model là Cart.cs (vì nó chứa SimilarProducts) *@
+@model _24DH112073_MyStore.Models.ViewModel.Cart
+@using PagedList.Mvc
+@using PagedList
+
+@* Bạn có thể cần tạo file CSS này sau, hoặc xóa dòng link đi *@
+<link rel="stylesheet" type="text/css" href="~/Content/myStyle/CustomerHome.css" />
+
+@if (Model.SimilarProducts != null && Model.SimilarProducts.Any())
+{
+    <section class="container-fluid listProduct">
+        <h2>@(ViewBag.RecommendedTitle ?? "Sản phẩm đề cử")</h2>
+        <ul class="list-container">
+
+            @foreach (var product in Model.SimilarProducts)
+            {
+                <li class="lproduct-item">
+                    <div>
+                        @* SỬA 2: Sửa link trỏ đến Home/ProductDetail *@
+                        <a href="@Url.Action("ProductDetail", "Home", new { id = product.ProductID })">
+                            <img src="@Url.Content(product.ProductImage ?? "~/Content/images/default.png")" />
+                        </a>
+                    </div>
+                    <div>
+                        <p class="prodName" style="height: 40px; overflow: hidden;">@Html.DisplayFor(modelItem => product.ProductName)</p>
+                        <p class="prodPrice">@Html.FormatValue(product.ProductPrice, "{0:N0} VNĐ")</p>
+                    </div>
+
+                    @* SỬA 3: Sửa link "Thêm vào giỏ" *@
+                    <div style="padding: 5px;">
+                        @Html.ActionLink("Thêm vào giỏ", "AddToCart", "Cart",
+                            new { area = "", productId = product.ProductID },
+                            new { @class = "btn btn-info btn-block" })
+                    </div>
+                </li>
+            }
+
+        </ul>
+    </section>
+
+    <div class="pagination-container" style="text-align: center;">
+        @* SỬA 4: Sửa Pager để gọi Cart/Index *@
+        @Html.PagedListPager(Model.SimilarProducts, page => Url.Action("Index", "Cart", new { page }),
+            new PagedListRenderOptions
+            {
+                UlElementClasses = new List<string> { "pagination" },
+                LiElementClasses = new List<string> { "page-item" }
+            })
+    </div>
+}

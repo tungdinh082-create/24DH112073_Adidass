@@ -1,0 +1,69 @@
+﻿@model _24DH112073_MyStore.Models.Order
+
+@{
+    ViewBag.Title = "Chi tiết Đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
+    // Lấy danh sách OrderDetails từ ViewBag (đã được Controller gửi sang)
+    var orderDetails = ViewBag.OrderDetails as List<_24DH112073_MyStore.Models.OrderDetail>;
+}
+
+<h2 class="bg-success" style="padding: 10px;">CHI TIẾT ĐƠN HÀNG SỐ: @Model.OrderID</h2>
+
+<div>
+    <h4>Thông tin Đơn hàng</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Khách hàng</dt>
+        <dd>@Html.DisplayFor(model => model.Customer.CustomerName)</dd>
+
+        <dt>Ngày đặt</dt>
+        <dd>@Html.DisplayFor(model => model.OrderDate)</dd>
+
+        <dt>Tổng tiền</dt>
+        <dd>@Html.DisplayFor(model => model.TotalAmount)</dd>
+
+        <dt>Trạng thái</dt>
+        <dd>@Html.DisplayFor(model => model.PaymentStatus)</dd>
+
+        <dt>Địa chỉ giao</dt>
+        <dd>@Html.DisplayFor(model => model.AddressDelivery)</dd>
+    </dl>
+</div>
+
+<hr />
+
+<h4>Các sản phẩm trong đơn</h4>
+
+@if (orderDetails != null && orderDetails.Any())
+{
+    <table class="table table-bordered">
+        <tr class="bg-info">
+            <th>Sản phẩm</th>
+            <th>Hình ảnh</th>
+            <th>Số lượng</th>
+            <th>Đơn giá</th>
+        </tr>
+
+        @foreach (var item in orderDetails)
+        {
+            <tr>
+                <td>@item.Product.ProductName</td>
+                <td>
+                    <img src="@Url.Content(item.Product.ProductImage ?? "~/Content/images/default.png")" style="max-width: 60px;" />
+                </td>
+                <td>@item.Quantity</td>
+                <td>@item.UnitPrice</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Không có chi tiết cho đơn hàng này.</p>
+}
+
+<p>
+    @Html.ActionLink("Sửa", "Edit", new { id = Model.OrderID }, new { @class = "btn btn-primary" }) 
+    @Html.ActionLink("Quay lại danh sách", "Index", null, new { @class = "btn btn-default" }, new { @class = "btn btn-primary" })
+</p>

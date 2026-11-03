@@ -1,0 +1,42 @@
+﻿@model _24DH112073_MyStore.Models.Product
+
+@{
+    ViewBag.Title = "Xóa vĩnh viễn";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="text-danger" style="padding: 10px;">XÓA VĨNH VIỄN SẢN PHẨM</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<h3 class="alert alert-warning">Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm này? </h3>
+
+<div style="padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+    <h4>@Html.DisplayFor(m => m.ProductName)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Đơn giá</dt>
+        <dd>@Html.FormatValue(Model.ProductPrice, "{0:N0} VNĐ")</dd>
+
+        <dt>Hình ảnh</dt>
+        <dd>
+            <img src="@Model.ProductImage" width="150" style="border: 1px solid #ccc; padding: 5px;" />
+        </dd>
+
+        <dt>Mô tả</dt>
+        <dd>@Html.DisplayFor(m => m.ProductDescription)</dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color" style="margin-top: 20px;">
+            <input type="submit" value="Xóa vĩnh viễn" class="btn btn-danger" />
+            <a href="@Url.Action("Trash", "Products")" class="btn btn-primary">Quay lại thùng rác</a>
+        </div>
+    }
+</div>

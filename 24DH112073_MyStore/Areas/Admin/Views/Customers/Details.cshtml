@@ -1,0 +1,101 @@
+﻿@model _24DH112073_MyStore.Models.Customer
+
+@{
+    ViewBag.Title = "Chi tiết Khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@* SỬA 1: Sửa lại H2 cho đúng và đẹp *@
+<h2 class="bg-success" style="padding:10px; color: white;">THÔNG TIN KHÁCH HÀNG: @Model.CustomerName</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        @* SỬA 2: Dịch các nhãn sang Tiếng Việt *@
+        <dt>
+            Tên Khách hàng
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomerName)
+        </dd>
+
+        <dt>
+            Số điện thoại
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomerPhone)
+        </dd>
+
+        <dt>
+            Email
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomerEmail)
+        </dd>
+
+        <dt>
+            Địa chỉ
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomerAddress)
+        </dd>
+
+        @* SỬA 3: Thêm Username và che Password *@
+        <dt>
+            Tài khoản (Username)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User.Username)
+        </dd>
+
+        <dt>
+            Mật khẩu
+        </dt>
+        <dd>
+            ******
+        </dd>
+
+    </dl>
+</div>
+<hr />
+<h3 class="bg-info" style="padding: 10px; color: white;">DANH SÁCH ĐƠN HÀNG CỦA KHÁCH HÀNG NÀY</h3>
+
+@{
+    // Ép kiểu ViewBag sang một biến List an toàn
+    var orders = ViewBag.Orders as List<_24DH112073_MyStore.Models.Order>;
+}
+
+@if (orders != null && orders.Any())
+{
+    <table class="table table-bordered table-hover">
+        <tr class="bg-success">
+            <th>Mã Đơn Hàng</th>
+            <th>Ngày Đặt</th>
+            <th>Tổng Tiền</th>
+            <th>Trạng Thái Thanh Toán/Giao Hàng</th>
+            <th></th>
+        </tr>
+
+        @foreach (var order in orders)
+        {
+            <tr>
+                <td>@order.OrderID</td>
+                @* SỬA 4: Format lại ngày cho gọn *@
+                <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                <td>@order.TotalAmount</td>
+                <td>@order.PaymentStatus</td>
+                <td>
+                    @Html.ActionLink("Xem chi tiết", "Details", "Orders", new { area = "Admin", id = order.OrderID }, new { @class = "btn btn-info btn-sm" })
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Khách hàng này chưa có đơn hàng nào.</p>
+}
+<p>
+    @* SỬA 5: Sửa lại ActionLink bị sai cú pháp (chỉ có 1 new { @class = ... }) *@
+    @Html.ActionLink("Quay lại danh sách", "Index", null, new { @class = "btn btn-primary" })
+</p>

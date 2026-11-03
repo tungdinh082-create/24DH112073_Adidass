@@ -1,0 +1,28 @@
+﻿@model _24DH112073_MyStore.Models.Product
+
+@{
+    ViewBag.Title = "Xóa Sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="bg-success" style="padding:10px;">XÓA SẢN PHẨM</h2>
+
+<h3 class="text-danger">BẠN CÓ CHẮN CHẮN MUỐN ẨN KHÔNG?</h3>
+
+@* Hiển thị thông tin sản phẩm (Giữ nguyên) *@
+@Html.Partial("PVProDinfo", Model)
+
+
+@* SỬA LỖI: Dùng Html.BeginForm() để tạo yêu cầu POST *@
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color" style="margin-top: 15px;">
+        @* SỬA 1: Đổi ActionLink thành input type="submit" *@
+        <input type="submit" value="ẩn " class="btn btn-danger" /> 
+
+        @* SỬA 2: Sửa lại class cho nút Quay lại *@
+        @Html.ActionLink("Quay lại danh sách", "Index", null, new { @class = "btn btn-default" }, new { @class = "btn btn-primary" })
+    </div>
+}

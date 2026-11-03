@@ -1,0 +1,75 @@
+﻿@model _24DH112073_MyStore.Models.ViewModel.ProductSearchVM
+@using PagedList.Mvc; 
+@using PagedList; 
+
+@* Thêm link CSS cho PagedList (cần thiết để hiển thị đẹp) *@
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@* Kiểm tra nếu có sản phẩm thì hiển thị bảng *@
+@if (Model.Products != null && Model.Products.Any())
+{
+    <table class="table table-bordered table-hover">
+        <tr class="bg-success">
+            <th>Hình ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Đơn giá</th>
+            <th>Danh mục</th>
+            <th style="width: 200px;"></th>
+        </tr>
+
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>
+                    @* Giả sử bạn đã cài đặt Upload Ảnh, nếu chưa, item.ProductImage có thể null *@
+                    @* Thay thế "~/Content/images/default.png" bằng ảnh mặc định của bạn nếu có *@
+                    <img src="@Url.Content(item.ProductImage ?? "~/Content/images/default.png")" style="max-width: 100px; height: auto;" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.ActionLink("Sửa", "Edit", new { id = item.ProductID }, new { @class = "btn btn-primary btn-sm" })
+                    @Html.ActionLink("Chi tiết", "Details", new { id = item.ProductID }, new { @class = "btn btn-info btn-sm" })
+                    @Html.ActionLink("Ẩn", "Delete", new { id = item.ProductID }, new { @class = "btn btn-danger btn-sm" })
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Không tìm thấy sản phẩm nào phù hợp.</p>
+}
+
+<p>
+    @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+@Html.PagedListPager(
+    Model.Products,
+    page => Url.Action("Index", new
+    {
+        page,
+        searchTerm = Model.SearchTerm,
+        minPrice = Model.MinPrice,
+        maxPrice = Model.MaxPrice,
+        sortOrder = Model.SortOrder
+    }),
+    new PagedListRenderOptions
+    {
+        // Thêm class "pagination" cho thẻ <ul> (thẻ bao ngoài)
+        UlElementClasses = new List<string> { "pagination" },
+
+        // Giữ class "page-item" cho thẻ <li> (từng nút)
+        LiElementClasses = new List<string> { "page-item" }
+
+        // BỎ DÒNG BỊ LỖI AnchorElementClasses
+    }
+)

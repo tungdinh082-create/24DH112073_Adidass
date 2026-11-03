@@ -1,0 +1,39 @@
+﻿
+@model _24DH112073_MyStore.Models.Product
+
+@{
+    ViewBag.Title = Model.ProductName;
+}
+
+<h2 class="bg-success" style="padding: 10px; color: white;">@Model.ProductName</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-5">
+        <img src="@Url.Content(Model.ProductImage ?? "~/Content/images/default.png")"
+             style="width: 100%; border: 1px solid #ddd; border-radius: 5px;"
+             alt="@Model.ProductName" />
+    </div>
+
+    <div class="col-md-7">
+        <h3>@Model.ProductName</h3>
+        <p style="font-size: 1.1rem; color: #666;">
+            Danh mục: @Model.Category.CategoryName
+        </p>
+
+        <p style="font-size: 1.2rem;">
+            @Model.ProductDescription
+        </p>
+
+        <h2 style="color: #c00; font-weight: bold; margin-top: 20px;">
+            @Html.FormatValue(Model.ProductPrice, "{0:N0} VNĐ")
+        </h2>
+
+        <div style="margin-top: 30px;">
+            @* Thêm Action cho Giỏ hàng *@
+            @Html.ActionLink("Thêm vào giỏ hàng", "AddToCart", "Cart",
+             new { area = "", productId = Model.ProductID },
+             new { @class = "btn btn-primary btn-lg" })
+        </div>
+    </div>
+</div>

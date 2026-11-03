@@ -1,0 +1,84 @@
+﻿@model _24DH112073_MyStore.Models.Customer
+@using _24DH112073_MyStore.Models.ViewModel
+
+@{
+    ViewBag.Title = "Thanh toán";
+    var cart = ViewBag.Cart as List<CartItem>;
+    decimal totalAmount = 0;
+}
+
+<h2 class="bg-success" style="padding: 10px; color: white;">XÁC NHẬN ĐƠN HÀNG</h2>
+<hr />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            <strong>Đã xảy ra lỗi:</strong> @ViewBag.Error
+        </div>
+    }
+    <div class="row">
+        <div class="col-md-7">
+            <h4>Thông tin Giao hàng</h4>
+            <p>Vui lòng xác nhận thông tin trước khi đặt hàng.</p>
+            <hr />
+            <div classs="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-3">Họ và Tên</label>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">Số điện thoại</label>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.CustomerPhone, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">Email</label>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.CustomerEmail, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">Địa chỉ giao hàng</label>
+                    <div class="col-md-9">
+                        @* Cho phép khách hàng sửa địa chỉ giao *@
+                        @Html.EditorFor(model => model.CustomerAddress, new { htmlAttributes = new { @class = "form-control", @name = "AddressDelivery" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <h4>Tóm tắt Đơn hàng</h4>
+            <hr />
+            @if (cart != null && cart.Any())
+            {
+                <table class="table">
+                    @foreach (var item in cart)
+                    {
+                        var lineTotal = item.Product.ProductPrice * item.Quantity;
+                        totalAmount += lineTotal;
+                        <tr>
+                            <td>@item.Product.ProductName (x @item.Quantity)</td>
+                            <td style="text-align: right;">@Html.FormatValue(lineTotal, "{0:N0} VNĐ")</td>
+                        </tr>
+                    }
+                    <tr style="border-top: 2px solid #333;">
+                        <td style="font-weight: bold; font-size: 1.2rem;">TỔNG CỘNG</td>
+                        <td style="font-weight: bold; font-size: 1.2rem; text-align: right; color: #c00;">@Html.FormatValue(totalAmount, "{0:N0} VNĐ")</td>
+                    </tr>
+                </table>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <input type="submit" value="Xác nhận Đặt hàng" class="btn btn-primary btn-lg btn-block" />
+                </div>
+            }
+        </div>
+    </div>
+}

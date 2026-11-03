@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "Đặt hàng thành công";
+}
+
+<div class="jumbotron text-center">
+    <h1 class="display-3" style="color: green;">Đặt hàng Thành công!</h1>
+    <p class="lead">Cảm ơn bạn đã mua hàng tại MyStore. Chúng tôi sẽ liên hệ với bạn để xác nhận đơn hàng.</p>
+    <hr>
+    <p>
+        Bạn muốn tiếp tục?
+    </p>
+    <p class="lead">
+        @Html.ActionLink("Tiếp tục mua sắm", "Index", "Home", null, new { @class = "btn btn-primary btn-sm" })
+        @* TODO: Thêm link tới Lịch sử mua hàng *@
+    </p>
+</div>

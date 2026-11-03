@@ -1,0 +1,52 @@
+﻿@model _24DH112073_MyStore.Models.Customer
+
+@{
+    ViewBag.Title = "Thông tin tài khoản";
+}
+
+<h2 class="bg-success" style="padding: 10px; color: white;">THÔNG TIN TÀI KHOẢN CỦA BẠN</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="list-group">
+            <a href="@Url.Action("ProfileInfo", "Account")" class="list-group-item list-group-item-action active">
+                Thông tin tài khoản
+            </a>
+            <a href="@Url.Action("MyOrder", "Order")" class="list-group-item list-group-item-action">
+                Quản lý đơn hàng
+            </a>
+            <a href="@Url.Action("Logout", "Account")" class="list-group-item list-group-item-action">
+                Đăng xuất
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <h4>Thông tin cá nhân</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>Họ và Tên</dt>
+            <dd>@Html.DisplayFor(model => model.CustomerName)</dd>
+
+            <dt>Tên đăng nhập</dt>
+            <dd>@Html.DisplayFor(model => model.Username)</dd>
+
+            <dt>Số điện thoại</dt>
+            <dd>@Html.DisplayFor(model => model.CustomerPhone)</dd>
+
+            <dt>Email</dt>
+            <dd>@Html.DisplayFor(model => model.CustomerEmail)</dd>
+
+            <dt>Địa chỉ</dt>
+            <dd>@Html.DisplayFor(model => model.CustomerAddress)</dd>
+        </dl>
+
+        <hr />
+        @* TODO: Thêm link tới trang "UpdateProfile" (Sửa thông tin) *@
+        @Html.ActionLink("Cập nhật thông tin", "UpdateProfile", "Account", null, new { @class = "btn btn-primary" })
+
+        @* TODO: Thêm link tới trang "ChangePassword" (Đổi mật khẩu) *@
+        @Html.ActionLink("Đổi mật khẩu", "ChangePassword", "Account", null, new { @class = "btn btn-primary" })
+    </div>
+</div>

@@ -1,0 +1,42 @@
+﻿@model _24DH112073_MyStore.Models.ViewModel.HomeProductVM
+@using PagedList.Mvc; 
+                             @* Bạn có thể cần tạo file CSS này sau, hoặc xóa dòng link đi *@
+<link rel="stylesheet" type="text/css" href="~/Content/myStyle/CustomerHome.css" />
+
+@if (Model.NewProducts != null && Model.NewProducts.Any())
+{
+    <section class="container-fluid listProduct">
+        <h2>Sản phẩm mới</h2>
+        <ul class="list-container">
+
+            @foreach (var product in Model.NewProducts)
+            {
+                <li class="lproduct-item">
+                    <div>
+                        @* SỬA LỖI SLIDE: Dùng Url.Action thay vì Href *@
+                        <a href="@Url.Action("ProductDetail", "Home", new { id = product.ProductID })">
+                            <img src="@Url.Content(product.ProductImage ?? "~/Content/images/default.png")" />
+                        </a>
+                    </div>
+                    <div>
+                        <p class="prodPrice">@Html.FormatValue(product.ProductPrice, "{0:N0} VNĐ")</p>
+                        <p class="prodName">@Html.DisplayFor(modelItem => product.ProductName)</p>
+                        <p class="prodSale">Đã bán: &nbsp; @Html.DisplayFor(modelItem => product.OrderDetails.Count)</p>
+                    </div>
+                </li>
+            }
+
+        </ul>
+    </section>
+
+    <div class="pagination-container" style="text-align: center;">
+        @Html.PagedListPager(Model.NewProducts, page => Url.Action("Index",
+     new { page, searchTerm = Model.SearchTerm }),
+     PagedListRenderOptions.ClassicPlusFirstAndLast 
+ )
+    </div>
+}
+else
+{
+    <p>Không tìm thấy sản phẩm nào phù hợp.</p>
+}

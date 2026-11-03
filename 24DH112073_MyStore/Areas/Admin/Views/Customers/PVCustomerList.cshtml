@@ -1,0 +1,60 @@
+﻿@model _24DH112073_MyStore.Models.ViewModel.CustomerSearchVM
+@using PagedList.Mvc
+@using PagedList
+
+@* Nhớ thêm file PagedList.css vào thư mục Content nếu chưa có *@
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@if (Model.Customers != null && Model.Customers.Any())
+{
+    <table class="table table-bordered table-hover">
+        <tr class="bg-success">
+            <th>Tên Khách hàng</th>
+            <th>Số điện thoại</th>
+            <th>Email</th>
+            <th>Địa chỉ</th>
+            <th>Tài khoản (Username)</th>
+            <th style="width: 180px;"></th>
+        </tr>
+
+        @foreach (var item in Model.Customers)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.CustomerName)</td>
+                <td>@Html.DisplayFor(modelItem => item.CustomerPhone)</td>
+                <td>@Html.DisplayFor(modelItem => item.CustomerEmail)</td>
+                <td>@Html.DisplayFor(modelItem => item.CustomerAddress)</td>
+                @* Hiển thị username nhờ .Include(c => c.User) trong Controller *@
+                <td>@Html.DisplayFor(modelItem => item.User.Username)</td>
+                <td>
+                   
+                    @Html.ActionLink("Chi tiết", "Details", new { id = item.CustomerID }, new { @class = "btn btn-info btn-sm" })
+                    
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Không tìm thấy khách hàng nào.</p>
+}
+
+
+@Html.PagedListPager(
+    Model.Customers,
+    page => Url.Action("Index", new
+    {
+        page,
+        searchTerm = Model.SearchTerm,
+        sortOrder = Model.SortOrder
+    }),
+    new PagedListRenderOptions
+    {
+        // Thêm class "pagination" cho thẻ <ul>
+        UlElementClasses = new List<string> { "pagination" },
+
+        // Thêm class "page-item" cho mỗi thẻ <li>
+        LiElementClasses = new List<string> { "page-item" }
+    }
+)

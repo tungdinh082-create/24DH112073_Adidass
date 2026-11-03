@@ -1,0 +1,35 @@
+﻿/* Set padding to keep content from hitting the edges */
+.body-content {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+    will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* KHỐI CODE GÂY LỖI ĐÃ BỊ XÓA BỎ */
+
+
+/* ========================================= */
+/* === CÁC LUẬT RESPONSIVE CHO DI ĐỘNG === */
+/* ========================================= */
+
+/* Áp dụng khi màn hình rộng từ 768px trở xuống (tablet và mobile) */
+@media (max-width: 768px) {
+
+    /* Giảm padding của body để có nhiều không gian hơn */
+    .body-content {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* Tăng cỡ chữ cho dễ đọc */
+    body {
+        font-size: 16px;
+    }
+}

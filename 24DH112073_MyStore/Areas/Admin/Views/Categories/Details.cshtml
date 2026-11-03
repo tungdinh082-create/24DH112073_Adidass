@@ -1,0 +1,50 @@
+﻿@model _24DH112073_MyStore.Models.Category
+
+@{
+    ViewBag.Title = "Chi tiết Danh mục";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="bg-success" style="padding:10px; color:white;">CHI TIẾT DANH MỤC</h2>
+
+<div>
+    <h4>@Model.CategoryName</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Tên Danh mục
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+    </dl>
+</div>
+
+<hr />
+<h3 class="bg-info" style="padding: 10px; color: white;">CÁC SẢN PHẨM THUỘC DANH MỤC NÀY</h3>
+
+<table class="table table-hover">
+    <tr>
+        <th>Hình ảnh</th>
+        <th>Tên Sản phẩm</th>
+        <th>Đơn giá</th>
+        <th>Số lượng tồn</th>
+    </tr>
+
+    @* Lặp qua danh sách sản phẩm (đã được Include) *@
+    @foreach (var product in Model.Products)
+    {
+        <tr>
+            <td>
+                <img src="@Url.Content(product.ProductImage ?? "~/Content/images/default.png")" style="max-width: 60px;" />
+            </td>
+            <td>@product.ProductName</td>
+            <td>@Html.FormatValue(product.ProductPrice, "{0:N0} VNĐ")</td>
+            <td>@product.Quantity</td>
+        </tr>
+    }
+</table>
+<p style="margin-top: 20px;">
+    @Html.ActionLink("Sửa", "Edit", new { id = Model.CategoryID }, new { @class = "btn btn-primary" }) 
+    @Html.ActionLink("Quay lại danh sách", "Index", null, new { @class = "btn btn-primary" })
+</p>

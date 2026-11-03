@@ -1,0 +1,62 @@
+﻿@model IEnumerable<_24DH112073_MyStore.Models.Order>
+
+@{
+    ViewBag.Title = "Lịch sử Mua hàng";
+    // Layout đã được set trong _ViewStart.cshtml
+}
+
+<h2 class="bg-success" style="padding: 10px; color: white;">TÀI KHOẢN CỦA BẠN</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="list-group">
+            <a href="@Url.Action("ProfileInfo", "Account")" class="list-group-item list-group-item-action">
+                Thông tin tài khoản
+            </a>
+            <a href="@Url.Action("PurchaseHistory", "Account")" class="list-group-item list-group-item-action active">
+                Quản lý đơn hàng
+            </a>
+            <a href="@Url.Action("Logout", "Account")" class="list-group-item list-group-item-action">
+                Đăng xuất
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <h4>Lịch sử mua hàng</h4>
+        <hr />
+
+        @if (Model != null && Model.Any())
+        {
+            <table class="table table-bordered table-hover">
+                <tr class="bg-info">
+                    <th>Mã Đơn Hàng</th>
+                    <th>Ngày Đặt</th>
+                    <th>Địa chỉ giao</th>
+                    <th>Trạng thái</th>
+                    <th>Tổng tiền</th>
+                    <th></th>
+                </tr>
+
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.OrderID</td>
+                        <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                        <td>@order.AddressDelivery</td>
+                        <td>@order.PaymentStatus</td>
+                        <td style="font-weight: bold; color: #c00;">@Html.FormatValue(order.TotalAmount, "{0:N0} VNĐ")</td>
+                        <td>
+                            @Html.ActionLink("Xem chi tiết", "Details", "Orders", new { area = "Admin", id = order.OrderID }, new { @class = "btn btn-info btn-sm" })
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <p>Bạn chưa có đơn hàng nào.</p>
+        }
+    </div>
+</div>

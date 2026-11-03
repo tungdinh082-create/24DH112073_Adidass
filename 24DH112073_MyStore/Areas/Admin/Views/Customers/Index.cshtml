@@ -1,0 +1,28 @@
+﻿@model _24DH112073_MyStore.Models.ViewModel.CustomerSearchVM
+
+@{
+    ViewBag.Title = "Quản lý Khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="bg-success" style="padding: 10px;">QUẢN LÝ KHÁCH HÀNG</h2>
+
+@using (Html.BeginForm("Index", "Customers", FormMethod.Get, new { @class = "form-inline" }))
+{
+    <div class="form-group search-container" style="display: flex; gap: 10px; margin-bottom: 15px;">
+        @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", placeholder = "Nhập tên hoặc email..." })
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </div>
+}
+
+<div class="order-container" style="margin-bottom: 15px;">
+    <strong>Sắp xếp theo:</strong>
+    @Html.ActionLink("Tên (A-Z)", "Index", new { sortOrder = "name_asc", searchTerm = Model.SearchTerm }, new { @class = "btn btn-primary btn-sm" }) 
+    @Html.ActionLink("Tên (Z-A)", "Index", new { sortOrder = "name_desc", searchTerm = Model.SearchTerm }, new { @class = "btn btn-primary btn-sm" })
+</div>
+
+<hr />
+
+<div id="customerResults">
+    @Html.Partial("PVCustomerList", Model)
+</div>

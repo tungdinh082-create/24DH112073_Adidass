@@ -1,0 +1,51 @@
+﻿@* SỬA 1: Đổi Model sang LoginVM *@
+@model _24DH112073_MyStore.Models.ViewModel.LoginVM
+@{
+    ViewBag.Title = "Đăng nhập";
+
+}
+<h2 class="bg-success" style="padding: 10px; color: white;">ĐĂNG NHẬP TÀI KHOẢN</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Nhập thông tin đăng nhập</h4>
+
+                @* SỬA 2: Hiển thị lỗi chung (nếu có) và lỗi validation *@
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="submit" value="Đăng nhập" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-md-6">
+        <h4>Chưa có tài khoản?</h4>
+        <p>Hãy đăng ký tài khoản mới để có thể mua hàng và theo dõi đơn hàng của bạn.</p>
+        @Html.ActionLink("Đăng ký ngay", "Register", "Account", null, new { @class = "btn btn-success" })
+    </div>
+</div>

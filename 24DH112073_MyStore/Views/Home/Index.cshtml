@@ -1,0 +1,63 @@
+﻿@model _24DH112073_MyStore.Models.ViewModel.HomeProductVM
+
+@{
+    ViewBag.Title = "Customer Home Page";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="~/Content/myStyle/CustomerHome.css" />
+
+
+<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" ;">
+
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+
+            <img src="@Url.Content("~/Content/images/ảnh .gif")" class="d-block w-100" alt="Banner 1" style="height: 400px; object-fit: cover;">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Chào mừng đến trang E-commerce</h5>
+                <p>Mua sắm trực tuyến với hàng ngàn sản phẩm đa dạng và chất lượng.</p>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+
+            <img src="@Url.Content("~/Content/images/logo-adidas-10.jpg")" class="d-block w-100" alt="Banner 2" style="height: 400px; object-fit: cover;">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Bộ sưu tập Giày mới</h5>
+                <p>Khám phá các mẫu giày thể thao mới nhất.</p>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+
+            <img src="@Url.Content("~/Content/images/baner3new.png")" class="d-block w-100" alt="Banner 3" style="height: 400px; object-fit: cover;">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Giảm giá đặc biệt</h5>
+                <p>Giảm giá lên đến 50% cho các mặt hàng giày.</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+@* PHẦN SẢN PHẨM NỔI BẬT (Giữ nguyên) *@
+@Html.Partial("_PVFeatureProduct", Model)
+
+@* PHẦN SẢN PHẨM MỚI (Giữ nguyên) *@
+@Html.Partial("_PVNewProduct", Model)
+
+@Html.Partial("_PVYouMightLike", Model.YouMightLikeProducts)

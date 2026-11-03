@@ -1,0 +1,65 @@
+﻿@* Đổi model sang ViewModel thống kê *@
+@model IEnumerable<_24DH112073_MyStore.Models.ViewModel.CategoryStatVM>
+
+@{
+    ViewBag.Title = "Trang chủ Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="bg-success" style="padding: 10px;">THỐNG KÊ HÀNG HÓA TỪNG LOẠI</h2>
+
+<table class="table table-bordered table-hover">
+    <tr class="bg-info">
+        <th>LOẠI HÀNG</th>
+        <th>SỐ LƯỢNG</th>
+        <th>GIÁ CAO NHẤT</th>
+        <th>GIÁ THẤP NHẤT</th>
+        <th>GIÁ TRUNG BÌNH</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CategoryName</td>
+            <td>@item.ProductCount</td>
+            <td>@Html.FormatValue(item.MaxPrice, "{0:N0}")</td>
+            <td>@Html.FormatValue(item.MinPrice, "{0:N0}")</td>
+            <td>@Html.FormatValue(item.AvgPrice, "{0:N2}")</td>
+        </tr>
+    }
+
+</table>
+
+<hr />
+
+<h2 class="bg-success" style="padding: 10px;">BIỂU ĐỒ THỐNG KÊ</h2>
+
+<div id="piechart" style="width: 900px; height: 500px;"></div>
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+
+    // Tải thư viện Google Chart
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        // Lấy dữ liệu JSON từ ViewBag mà Controller đã gửi sang
+        var jsonData = @ViewBag.ChartData;
+
+        // Chuyển JSON thành Bảng dữ liệu của Google
+        var data = google.visualization.arrayToDataTable(jsonData);
+
+        // Tùy chọn cho biểu đồ
+        var options = {
+            title: 'Tỷ lệ hàng hóa theo loại',
+            is3D: true, // Biểu đồ 3D
+        };
+
+        // Vẽ biểu đồ
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+    }
+</script>

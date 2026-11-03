@@ -1,0 +1,251 @@
+﻿/* Style cho phần BANNER */
+.banner {
+    background-image: url('../../images/banner.jpg'); 
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+.banner-container {
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 4px #000000; /* Thêm bóng chữ cho dễ đọc */
+}
+
+    .banner-container h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+
+    .banner-container p {
+        font-size: 1.5rem;
+    }
+
+.btnBanner {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: darkorange;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+    .btnBanner:hover {
+        background-color: orangered;
+        color: white;
+        text-decoration: none;
+    }
+
+/* Style cho phần SEARCH */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.search-input {
+    width: 500px;
+    max-width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+}
+
+.search-button {
+    padding: 10px 25px;
+    background-color: brown;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+}
+
+    .search-button:hover {
+        background-color: #a52a2a;
+    }
+
+.searchProd {
+    text-align: center;
+    margin-top: 20px;
+}
+
+    .searchProd h2 {
+        font-size: 2em;
+        margin-bottom: 20px;
+        color: brown;
+    }
+
+/* Style chung cho tiêu đề khu vực sản phẩm */
+.featureProd h2, .listProduct h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: brown;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* --- STYLE FEATURE PRODUCT (Slider ngang) --- */
+.featureProd {
+    text-align: left;
+    margin-bottom: 40px;
+}
+
+.feature-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 15px; /* Để chỗ cho thanh cuộn */
+    gap: 15px;
+}
+
+.fproduct-item {
+    width: 200px; /* Tăng độ rộng thẻ */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    background: white;
+    padding: 10px;
+    transition: transform 0.2s;
+}
+
+    .fproduct-item:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .fproduct-item img {
+        display: block;
+        width: 100%;
+        height: 180px; /* Tăng chiều cao ảnh */
+        object-fit: contain;
+        margin-bottom: 10px;
+    }
+
+/* --- STYLE LIST PRODUCT (Lưới Grid - QUAN TRỌNG) --- */
+.listProduct {
+    text-align: left;
+    margin-bottom: 40px;
+}
+
+.list-container {
+    list-style-type: none;
+    display: grid;
+    /* --- SỬA DÒNG NÀY: Ép cứng thành 6 cột bằng nhau --- */
+    grid-template-columns: repeat(6, 1fr);
+    /* -------------------------------------------------- */
+
+    gap: 15px; /* Khoảng cách giữa các ô */
+    margin: 0;
+    padding: 0 10px;
+}
+
+/* --- THÊM ĐOẠN NÀY ĐỂ RESPONSIVE (QUAN TRỌNG) --- */
+/* Nếu không thêm đoạn này, xem trên điện thoại sẽ bị bé xíu */
+
+/* Màn hình Laptop nhỏ (dưới 1200px) -> Xuống 4 cột */
+@media (max-width: 1200px) {
+    .list-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Màn hình Tablet (dưới 992px) -> Xuống 3 cột */
+@media (max-width: 992px) {
+    .list-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Màn hình Điện thoại (dưới 768px) -> Xuống 2 cột */
+@media (max-width: 768px) {
+    .list-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.lproduct-item {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Đẩy nội dung giãn đều */
+    height: 100%; /* Quan trọng: Chiếm hết chiều cao của ô lưới */
+    min-height: 380px; /* Đặt chiều cao tối thiểu cho mỗi ô */
+}
+
+    .lproduct-item:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .lproduct-item img {
+        display: block;
+        width: 100%;
+        /* SỬA: Tăng chiều cao ảnh từ 120px lên 250px cho rõ nét */
+        height: 250px;
+        object-fit: contain;
+        margin-bottom: 15px;
+    }
+
+/* --- STYLE CHỮ VÀ THÔNG TIN --- */
+.prodPrice {
+    font-size: 1.1rem;
+    color: #d0021b; /* Màu đỏ giá tiền */
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.prodName {
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
+    
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    height: 40px; 
+    line-height: 20px;
+}
+
+    .prodName a {
+        color: #333;
+        text-decoration: none;
+        display: block; 
+    }
+
+.prodCate {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 10px;
+    white-space: nowrap; /* Cấm xuống dòng */
+    overflow: hidden; /* Ẩn phần thừa */
+    text-overflow: ellipsis; /* Thêm dấu ... */
+    display: block; /* Bắt buộc dạng khối */
+    width: 100%; /* Chiều rộng tối đa bằng khung chứa */
+    /* ----------------------------------------------------- */
+}
+
+.prodSale {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Style cho phần chọn size (nếu có) */
+.prod-size-group {
+    margin-top: 10px;
+    border-top: 1px dashed #eee;
+    padding-top: 10px;
+}

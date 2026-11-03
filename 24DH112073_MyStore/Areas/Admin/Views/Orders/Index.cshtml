@@ -1,0 +1,86 @@
+﻿@* Đổi model sang OrderSearchVM *@
+@model _24DH112073_MyStore.Models.ViewModel.OrderSearchVM
+@using PagedList.Mvc
+@using PagedList
+
+@{
+    ViewBag.Title = "Quản lý Đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@* Nhớ thêm file PagedList.css vào thư mục Content nếu bạn chưa có *@
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<h2 class="bg-success" style="padding: 10px;">QUẢN LÝ ĐƠN HÀNG</h2>
+
+@using (Html.BeginForm("Index", "Orders", FormMethod.Get, new { @class = "form-inline" }))
+{
+    <div class="form-group search-container" style="display: flex; gap: 10px; margin-bottom: 15px;">
+        @* Ô tìm theo tên khách hàng *@
+        @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", placeholder = "Tìm theo tên khách hàng..." })
+
+        @* Dropdown Lọc theo Trạng thái *@
+        @Html.DropDownList("status", ViewBag.StatusList as SelectList, "Tất cả trạng thái", new { @class = "form-control" })
+
+        <button type="submit" class="btn btn-primary">Lọc/Tìm</button>
+    </div>
+}
+
+<hr />
+
+@* Bảng kết quả *@
+<table class="table table-bordered table-hover">
+    <tr class="bg-success">
+        <th>Mã Đơn Hàng</th>
+        <th>Tên Khách Hàng</th>
+        <th>Ngày Đặt</th>
+        <th>Tổng Tiền</th>
+        <th>Trạng Thái</th>
+        <th>Địa chỉ giao</th>
+        <th></th>
+    </tr>
+
+    @if (Model.Orders != null && Model.Orders.Any())
+    {
+        foreach (var item in Model.Orders)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.OrderID)</td>
+
+                @* Hiển thị tên Customer nhờ .Include(o => o.Customer) *@
+                <td>@Html.DisplayFor(modelItem => item.Customer.CustomerName)</td>
+
+                <td>@Html.DisplayFor(modelItem => item.OrderDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.TotalAmount)</td>
+                <td>@Html.DisplayFor(modelItem => item.PaymentStatus)</td>
+                <td>@Html.DisplayFor(modelItem => item.AddressDelivery)</td>
+                <td style="width: 200px;">
+                    @Html.ActionLink("Chi tiết", "Details", new { id = item.OrderID }, new { @class = "btn btn-info btn-sm" })
+                    
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+@if (Model.Orders == null || !Model.Orders.Any())
+{
+    <p>Không tìm thấy đơn hàng nào.</p>
+}
+
+
+
+@Html.PagedListPager(
+    Model.Orders,
+    page => Url.Action("Index", new
+    {
+        page,
+        searchTerm = Model.SearchTerm,
+        status = Model.Status
+    }),
+    new PagedListRenderOptions
+    {
+        UlElementClasses = new List<string> { "pagination" },
+        LiElementClasses = new List<string> { "page-item" }
+    }
+)

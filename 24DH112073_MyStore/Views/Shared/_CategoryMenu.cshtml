@@ -1,0 +1,13 @@
+﻿@model IEnumerable<_24DH112073_MyStore.Models.Category>
+
+@foreach (var item in Model)
+{
+    <li class="nav-item">
+        @* <-- THÊM CLASS "nav-item" VÀO ĐÂY *@
+        @Html.ActionLink(item.CategoryName,
+                              "ProductsByCategory",
+                              "Products",
+                              new { area = "", categoryId = item.CategoryID },
+                              new { @class = "nav-link" })
+    </li>
+}

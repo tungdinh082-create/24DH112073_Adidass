@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - MyStore (Cửa hàng của bạn)</title>
+
+    @*Link tới file CSS*@
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @*icon*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <style>
+        /* SỐ LƯỢNG GIỎ HÀNG */
+        .cart-icon-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: 0px;
+            right: -5px;
+            transform: translate(0, -20%);
+            background-color: #ff0000;
+            color: white;
+            border-radius: 50%;
+            padding: 1px 5px;
+            font-size: 10px;
+            font-weight: bold;
+            border: 1px solid white;
+            min-width: 15px;
+            text-align: center;
+        }
+    </style>
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;">
+        <div class="container">
+            <a class="navbar-brand" href="@Url.Action("Index", "Home", new { area = "" })">
+                <img src="@Url.Content("~/Content/images/logo.jpg")" alt="MyStore Logo" style="height: 50px;" />
+            </a>
+
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">@Html.ActionLink("Trang chủ", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Danh mục
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="categoryDropdown">
+                            <a class="dropdown-item" href="@Url.Action("Index", "Home", new { SearchTerm = "Giày Thể Thao" })">Giày Thể Thao</a>
+                            <a class="dropdown-item" href="@Url.Action("Index", "Home", new { SearchTerm = "Áo Thể Thao" })">Áo Thể Thao</a>
+                            <a class="dropdown-item" href="@Url.Action("Index", "Home", new { SearchTerm = "Quần Thể Thao" })">Quần Thể Thao</a>
+                            <a class="dropdown-item" href="@Url.Action("Index", "Home", new { SearchTerm = "Phụ Kiện Thể Thao" })">Phụ Kiện Thể Thao</a>
+                            <a class="dropdown-item" href="@Url.Action("Index", "Home", new { SearchTerm = "Dụng Cụ Thể Thao" })">Dụng Cụ Thể Thao</a>
+                        </div>
+                    </li>
+                </ul>
+
+                @using (Html.BeginForm("Index", "Home", new { area = "" }, FormMethod.Get, new { @class = "d-flex" }))
+                {
+                    <input class="form-control me-2" type="search" name="SearchTerm" placeholder="Tìm giày, áo..." aria-label="Search" style="width: 250px;">
+                    <button class="btn btn-outline-success" type="submit">Tìm</button>
+                }
+                <ul class="navbar-nav">
+                    @* GIỎ HÀNG  *@
+                    <li class="nav-item">
+                        @{
+                            // 1. Lấy đúng tên Session là "CartSession"
+                            // 2. Ép kiểu về đúng class "Cart" (thay namespace nếu cần)
+                            var cart = Session["CartSession"] as _24DH112073_MyStore.Models.ViewModel.Cart;
+
+                            int totalQty = 0;
+
+                            // 3. Kiểm tra null an toàn
+                            if (cart != null && cart.Items != null)
+                            {
+                                // Cộng dồn số lượng
+                                totalQty = cart.Items.Sum(m => m.Quantity);
+                            }
+                        }
+
+                        <a href="@Url.Action("Index", "Cart", new { area = "" })" class="nav-link cart-icon-wrap">
+                            <i class="fas fa-shopping-cart"></i>
+
+                            @if (totalQty > 0)
+                            {
+                                <span class="cart-badge">@totalQty</span>
+                            }
+                        </a>
+                    </li>
+
+                    @if (Session["CustomerSession"] != null)
+                    {
+                        var customer = Session["CustomerSession"] as _24DH112073_MyStore.Models.Customer;
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Chào, @customer.CustomerName
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Lịch sử mua hàng", "MyOrder", "Order", new { area = "" }, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Thông tin tài khoản", "ProfileInfo", "Account", new { area = "" }, new { @class = "dropdown-item" })
+                                <div class="dropdown-divider"></div>
+                                @Html.ActionLink("Đăng xuất", "Logout", "Account", new { area = "" }, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">@Html.ActionLink("Đăng nhập", "Login", "Account", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Đăng ký", "Register", "Account", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container body-content" style="padding-top: 80px;">
+        @RenderBody()
+    </div>
+
+    <hr />
+    <footer class="bg-dark text-white" style="padding: 40px 0; margin-top: 30px; font-size: 0.9rem;">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <h5>HỖ TRỢ KHÁCH HÀNG</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white" style="text-decoration: none;">Các câu hỏi thường gặp</a></li>
+                        <li><a href="#" class="text-white" style="text-decoration: none;">Gửi yêu cầu hỗ trợ</a></li>
+                        <li><a href="#" class="text-white" style="text-decoration: none;">Hướng dẫn đặt hàng</a></li>
+                        <li><a href="#" class="text-white" style="text-decoration: none;">Chính sách đổi trả</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4">
+                    <h5>VỀ CHÚNG TÔI</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white" style="text-decoration: none;">Giới thiệu</a></li>
+                        <li><a href="#" class="text-white" style="text-decoration: none;">Tuyển dụng</a></li>
+                        <li><a href="#" class="text-white" style="text-decoration: none;">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4">
+                    <h5>KẾT NỐI VỚI CHÚNG TÔI</h5>
+                    <div>
+                        
+                        <a href="#" class="text-white" style="font-size: 24px; margin-right: 15px;"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white" style="font-size: 24px; margin-right: 15px;"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white" style="font-size: 24px; margin-right: 15px;"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr style="border-top: 1px solid #555;" />
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <p>&copy; @DateTime.Now.Year - MyStore - Đinh Thanh Tùng</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    
+    @Scripts.Render("~/bundles/jquery")
+
+   
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

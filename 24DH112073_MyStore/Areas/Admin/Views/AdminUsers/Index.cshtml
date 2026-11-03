@@ -1,0 +1,19 @@
+﻿@* Đổi model sang AdminUserSearchVM *@
+@model _24DH112073_MyStore.Models.ViewModel.AdminUserSearchVM
+
+@{
+    ViewBag.Title = "Quản lý Tài khoản Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="bg-success" style="padding: 10px;">QUẢN LÝ TÀI KHOẢN ADMIN</h2>
+
+<p>
+    @Html.ActionLink("Thêm mới Admin", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+<hr />
+
+<div id="adminUserResults">
+    @Html.Partial("PVAdminUserList", Model)
+</div>

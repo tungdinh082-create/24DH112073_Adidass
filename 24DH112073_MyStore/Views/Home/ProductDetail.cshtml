@@ -1,0 +1,108 @@
+﻿@model _24DH112073_MyStore.Models.ViewModel.ProductDetailsVM
+
+@{
+    ViewBag.Title = Model.Product.ProductName;
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<div class="container-fluid pro" style="padding-top: 20px;">
+    <div class="row div-horizontal">
+
+        <div class="col-md-4 pro-section">
+            <img src="@Url.Content(Model.Product.ProductImage ?? "~/Content/images/default.png")"
+                 style="width: 100%; height: auto; object-fit: contain; border: 1px solid #ddd; border-radius: 5px;"
+                 alt="@Model.Product.ProductName" />
+        </div>
+
+        <div class="col-md-5 pro-section">
+            <div>
+                <h4>@Html.DisplayFor(model => model.Product.ProductName)</h4>
+                <p class="pro-sale">Đã bán: &nbsp; @Model.Product.OrderDetails.Count()</p>
+                <p class="pro-price" style="font-size: 2rem; color: #c00; font-weight: bold;">
+                    @Html.FormatValue(Model.Product.ProductPrice, "{0:N0} VNĐ")
+                </p>
+
+                <p><strong>Danh mục:</strong> @Model.Product.Category.CategoryName</p>
+
+                <p><strong>Màu sắc:</strong> @Html.DisplayFor(model => model.Product.Color)</p>
+                <p><strong>Kích cỡ:</strong> @Html.DisplayFor(model => model.Product.ProductSize)</p>
+                <hr />
+                <h5>Mô tả</h5>
+                <p>@Html.DisplayFor(model => model.Product.ProductDescription)</p>
+            </div>
+            <hr />
+
+            @Html.Partial("_PVRelatedProduct", Model)
+        </div>
+
+        <div class="col-md-3 pro-section">
+
+            @Html.HiddenFor(model => model.Product.ProductID)
+
+            <h4>Số lượng</h4>
+            <p>
+                @Html.TextBoxFor(model => model.quantity, new
+                {
+                    @class = "form-control",
+                    @type = "number",
+                    @min = 1,
+                    @id = "txtQuantity",
+                    @data_price = Model.Product.ProductPrice
+                })
+            </p>
+
+            <h4 style="margin-top: 10px;">Tạm tính:</h4>
+
+            <p id="lblTotal" style="color: #c00; font-weight: bold; font-size: 1.5rem;">
+                @Html.FormatValue((Model.Product.ProductPrice * Model.quantity), "{0:N0} VNĐ")
+            </p>
+
+            <p>
+                <a href="/Cart/AddToCart?productId=@Model.Product.ProductID&quantity=@Model.quantity"
+                   id="btnAddToCart"
+                   data-productid="@Model.Product.ProductID"
+                   class="btn btn-primary btn-lg btn-block">
+                    Thêm vào giỏ hàng
+                </a>
+            </p>
+
+            <hr />
+            @Html.Partial("_PVTopProduct", Model)
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Bắt sự kiện khi gõ phím hoặc bấm nút tăng giảm số lượng
+            $('#txtQuantity').on('input change', function () {
+
+                // 1. Lấy số lượng và giá
+                var quantity = $(this).val();
+                var price = $(this).data('price'); // Lấy từ data-price
+                var productId = $('#btnAddToCart').data('productid');
+
+                // Kiểm tra nếu số lượng < 1 thì gán bằng 1
+                if (quantity < 1 || isNaN(quantity)) {
+                    quantity = 1;
+                    // Không reset value ngay để người dùng dễ gõ, nhưng tính toán thì dùng 1
+                }
+
+                // 2. Tính thành tiền
+                var total = quantity * price;
+
+                // 3. Định dạng tiền tệ Việt Nam (VD: 1.000.000 VNĐ)
+                var formattedTotal = total.toLocaleString('vi-VN') + " VNĐ";
+
+                // 4. Cập nhật hiển thị Tạm tính
+                $('#lblTotal').text(formattedTotal);
+
+                // 5. QUAN TRỌNG: Cập nhật link "Thêm vào giỏ hàng" với số lượng mới
+                // Nếu không làm bước này, nó sẽ luôn thêm số lượng cũ (lúc mới tải trang)
+                var newHref = "/Cart/AddToCart?productId=" + productId + "&quantity=" + quantity;
+                $('#btnAddToCart').attr('href', newHref);
+            });
+        });
+    </script>
+}

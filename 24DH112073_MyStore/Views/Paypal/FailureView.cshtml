@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Thanh toán Thất bại";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<div class="jumbotron text-center">
+    <h1 class="display-3" style="color: red;">Thanh toán Thất bại!</h1>
+    <p class="lead">Đã xảy ra lỗi trong quá trình xử lý thanh toán PayPal của bạn.</p>
+
+    @* Hiển thị thông báo lỗi chi tiết (nếu có) *@
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger" style="max-width: 600px; margin: auto;">
+            <strong>Chi tiết lỗi:</strong> @ViewBag.Error
+        </div>
+    }
+    <hr>
+    <p>
+        Vui lòng thử lại hoặc chọn phương thức thanh toán khác.
+    </p>
+    <p class="lead">
+        @Html.ActionLink("Quay lại Giỏ hàng", "Index", "Cart", null, new { @class = "btn btn-warning btn-sm" })
+        @Html.ActionLink("Quay lại Trang chủ", "Index", "Home", null, new { @class = "btn btn-primary btn-sm" })
+    </p> 
+</div>

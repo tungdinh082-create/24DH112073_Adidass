@@ -1,0 +1,39 @@
+﻿@model _24DH112073_MyStore.Models.Product
+@* trang delete và dẻails *@
+<head>
+    <style>
+        img {
+            height: 250px;
+            max-width: 250px;
+        }
+    </style>
+</head>
+
+
+<div class="container-fluid">
+    <div class="div-horizontal">
+        <div class="col-md-3">
+            <img src="@Html.DisplayFor(model => model.ProductImage)" />
+        </div>
+        <div class="col-md-9">
+            <dl>
+                <dt> TÊN SẢN PHẨM </dt>
+                <dd>@Html.DisplayFor(model => model.ProductName) </dd>
+
+                <dt>MÔ TẢ </dt>
+                <dd>@Html.DisplayFor(model => model.ProductDescription) </dd>
+
+                <dt>ĐƠN GIÁ</dt>
+                <dd>@Html.DisplayFor(model => model.ProductPrice)</dd>
+
+                <dt>HÌNH ẢNH</dt>
+                <dd></dd>
+
+                <dt>DANH MỤC</dt>
+                <dd> @Html.DisplayFor(model => model.Category.CategoryName)</dd>
+
+            </dl>
+        </div>
+
+    </div>
+</div>

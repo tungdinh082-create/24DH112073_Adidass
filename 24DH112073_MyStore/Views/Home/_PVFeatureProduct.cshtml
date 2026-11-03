@@ -1,0 +1,34 @@
+﻿@model _24DH112073_MyStore.Models.ViewModel.HomeProductVM
+
+@* Bạn có thể cần tạo file CSS này sau, hoặc xóa dòng link đi *@
+<link rel="stylesheet" type="text/css" href="~/Content/myStyle/CustomerHome.css" />
+
+@if (Model.FeaturedProducts != null && Model.FeaturedProducts.Any())
+{
+    <section class="container-fluid featureProd" id="featured-products">
+        <h2>Sản phẩm nổi bật</h2>
+        <div class="feature-container">
+
+            @foreach (var product in Model.FeaturedProducts)
+            {
+                <div class="fproduct-item">
+                    <div>
+                        @* SỬA LỖI SLIDE: Dùng Url.Action thay vì Href *@
+                        <a href="@Url.Action("ProductDetail", "Home", new { id = product.ProductID })">
+                            <img src="@Url.Content(product.ProductImage ?? "~/Content/images/default.png")" />
+                        </a>
+                    </div>
+                    <div>
+                        @* Hiển thị Giá, Tên, Danh mục, Lượt bán *@
+                        <p class="prodPrice">@Html.FormatValue(product.ProductPrice, "{0:N0} VNĐ")</p>
+                        <p class="prodName">@Html.DisplayFor(modelItem => product.ProductName)</p>
+                        <p class="prodCate">@Html.DisplayFor(modelItem => product.Category.CategoryName)</p>
+                        <p class="prodSale">Đã bán: &nbsp; @Html.DisplayFor(modelItem => product.OrderDetails.Count)</p>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </section>
+    <hr />
+}

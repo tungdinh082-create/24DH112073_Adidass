@@ -1,0 +1,39 @@
+﻿@model _24DH112073_MyStore.Models.ViewModel.ProductSearchVM
+@{
+    ViewBag.Title = "Danh sách Sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="bg-success" style="padding: 10px;">DANH SÁCH SẢN PHẨM</h2>
+
+@using (Html.BeginForm("Index", "Products", FormMethod.Get, new { @class = "form-inline" }))
+{
+    <div class="form-group search-container" style="display: flex; gap: 5px; margin-bottom: 10px; align-items: center;">
+
+        @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", placeholder = "Nhập tên, mô tả...", style = "flex-grow: 1;" })
+        @Html.TextBoxFor(m => m.MinPrice, new { @class = "form-control", placeholder = "Giá min", type = "number", style = "width: 80px;" })
+        @Html.TextBoxFor(m => m.MaxPrice, new { @class = "form-control", placeholder = "Giá max", type = "number", style = "width: 80px;" })
+
+        <button type="submit" class="btn btn-primary" title="Tìm kiếm">
+            Tìm
+        </button>
+
+        <a href="@Url.Action("Trash", "Products")" class="btn btn-danger" title="Thùng rác" style="font-size: 18px; line-height: 1; padding: 6px 12px;">
+            &#128465;
+        </a>
+    </div>
+}
+
+<div class="order-container" style="margin-bottom: 15px; margin-top: 0px;">
+    <strong style="margin-right: 5px;">Sắp xếp:</strong>
+    @Html.ActionLink("Tên tăng dần", "Index", new { sortOrder = "name_asc", searchTerm = Model.SearchTerm, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice }, new { @class = "btn btn-primary btn-sm" })
+    @Html.ActionLink("Tên giảm dần", "Index", new { sortOrder = "name_desc", searchTerm = Model.SearchTerm, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice }, new { @class = "btn btn-primary btn-sm" })
+    @Html.ActionLink("Giá tăng dần", "Index", new { sortOrder = "price_asc", searchTerm = Model.SearchTerm, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice }, new { @class = "btn btn-primary btn-sm" })
+    @Html.ActionLink("Giá giảm dần", "Index", new { sortOrder = "price_desc", searchTerm = Model.SearchTerm, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice }, new { @class = "btn btn-primary btn-sm" })
+</div>
+
+<hr style="margin-top: 10px; margin-bottom: 10px;" />
+
+<div id="searchResults">
+    @Html.Partial("PVListProduct", Model)
+</div>
