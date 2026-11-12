@@ -1001,3 +1001,5 @@ insert into [Order] (OrderID, CustomerID, OrderDate, TotalAmount, PaymentStatus,
 insert into [Order] (OrderID, CustomerID, OrderDate, TotalAmount, PaymentStatus, AddressDelivery, DeliveryMethod, PaymentMethod) values (998, 414, '2026-06-05 16:54:00', 2099000, N'Chờ xử lý', N'359 Võ Văn Ngân, TP. Thủ Đức, TP.HCM', N'Giao hàng nhanh (Express)', N'Tiền mặt (COD)');
 insert into [Order] (OrderID, CustomerID, OrderDate, TotalAmount, PaymentStatus, AddressDelivery, DeliveryMethod, PaymentMethod) values (999, 143, '2026-05-03 14:09:00', 3848000, N'Thanh toán khi nhận hàng (COD)', N'360 Sư Vạn Hạnh, Quận 10, TP.HCM', N'Giao hàng nhanh (Express)', N'Chuyển khoản ngân hàng');
 insert into [Order] (OrderID, CustomerID, OrderDate, TotalAmount, PaymentStatus, AddressDelivery, DeliveryMethod, PaymentMethod) values (1000, 37, '2026-06-29 18:27:00', 5197000, N'Đã hoàn tiền', N'156 Điện Biên Phủ, Quận Bình Thạnh, TP.HCM', N'Nhận tại cửa hàng Adidas', N'PayPal');
+
+-- Verified on branch Feature/shopping_cart_checkout by Đinh Thanh Tùng (24DH112073)
