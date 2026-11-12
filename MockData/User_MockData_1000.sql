@@ -1001,3 +1001,5 @@ insert into [User] (Username, Password, UserRole) values ('customer_user_997', '
 insert into [User] (Username, Password, UserRole) values ('customer_user_998', 'Pass@654396', 'Customer');
 insert into [User] (Username, Password, UserRole) values ('customer_user_999', 'Pass@201788', 'Customer');
 insert into [User] (Username, Password, UserRole) values ('customer_user_1000', 'Pass@526120', 'Customer');
+
+-- Verified on branch Feature/implement_login_func by Đinh Thanh Tùng (24DH112073)
