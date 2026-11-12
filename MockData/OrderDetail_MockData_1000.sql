@@ -1001,3 +1001,5 @@ insert into OrderDetail (ID, ProductID, OrderID, Quantity, UnitPrice, TotalPrice
 insert into OrderDetail (ID, ProductID, OrderID, Quantity, UnitPrice, TotalPrice) values (998, 966, 581, 3, 2740000, 8220000);
 insert into OrderDetail (ID, ProductID, OrderID, Quantity, UnitPrice, TotalPrice) values (999, 24, 414, 3, 688000, 2064000);
 insert into OrderDetail (ID, ProductID, OrderID, Quantity, UnitPrice, TotalPrice) values (1000, 457, 568, 2, 3344000, 6688000);
+
+-- Verified on branch Feature/mockaroo_all_tables_seed by Đinh Thanh Tùng (24DH112073)
